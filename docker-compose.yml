@@ -1,0 +1,59 @@
+version: "3.9"
+services:
+#  postgres:
+#    image: "postgres:${POSTGRES_VERSION}"
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - postgres:/var/lib/postgresql/data
+#    environment:
+#      - POSTGRES_USER=${POSTGRES_USER}
+#      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+#      - POSTGRES_DB=${POSTGRES_DB}
+#volumes:
+
+  emulator:
+    image: "gcr.io/cloud-spanner-emulator/emulator"
+    pull_policy: always
+    container_name: spanner-emulator
+    ports:
+    - "9010:9010"
+    - "9020:9020"
+  pgadapter:
+    depends_on:
+      emulator:
+        condition: service_started
+    image: "gcr.io/cloud-spanner-pg-adapter/pgadapter"
+    pull_policy: always
+    container_name: pgadapter-connected-to-spanner-emulator
+    command:
+      - "-p test-project"
+      - "-i test-instance"
+      - "-r autoConfigEmulator=true"
+      - "-e emulator:9010"
+      - "-c \"\""
+      - "-x"
+    ports:
+      - "5432:5432"
+
+  # Firestore container emulator + ui
+  firestore:
+    container_name: 'firestore'
+    image: spine3/firebase-emulator
+    environment:
+      - GCP_PROJECT=project-test
+      - ENABLE_UI=true
+    ports:
+      - 9000:9000
+      - 8080:8080
+      - 4000:4000
+      - 9099:9099
+      - 8085:8085
+      - 5001:5001
+      - 9199:9199
+    volumes:
+      - firestore_data:/opt/data
+
+volumes:
+  firestore_data:
+    driver: local
