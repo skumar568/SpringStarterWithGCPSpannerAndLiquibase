@@ -17,9 +17,9 @@ import java.util.UUID;
 @SQLDelete(sql = "UPDATE cookie SET is_deleted = true WHERE id=?")
 public class Cookie extends AuditorEntity {
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
-    private UUID id;
+    private String id;
 
     private String flavour;
 

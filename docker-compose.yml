@@ -54,6 +54,15 @@ services:
     volumes:
       - firestore_data:/opt/data
 
+  jaeger:
+    container_name: 'jaeger'
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - 4318:4318
+      - 16686:16686
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+
 volumes:
   firestore_data:
     driver: local

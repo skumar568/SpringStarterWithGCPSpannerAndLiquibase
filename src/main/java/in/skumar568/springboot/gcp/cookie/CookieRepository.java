@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface CookieRepository extends CrudRepository<Cookie, Long> {
 
-    public Cookie findById(UUID cookieId);
+    public Cookie findById(String cookieId);
 }

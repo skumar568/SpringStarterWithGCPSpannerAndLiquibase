@@ -25,7 +25,6 @@ public class CookieController {
 
     @PostMapping
     public ResponseEntity<Cookie> save( @RequestBody Cookie cookie) throws Exception {
-//        pubSubUtility.publishRecordToPubSub(cookie.getFlavour());
         return ResponseEntity.ok().body(cookieRepository.save(cookie));
     }
 
@@ -36,7 +35,7 @@ public class CookieController {
     }
 
     @DeleteMapping("/{cookieId}")
-    public  String delete (@PathVariable UUID cookieId){
+    public  String delete (@PathVariable String cookieId){
         Cookie cookie = cookieRepository.findById(cookieId);
 
         log.info("deleting ", cookie.getId());
